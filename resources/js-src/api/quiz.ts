@@ -50,6 +50,9 @@ export const AdminQuizApi = {
     update: (id: string, payload: Partial<Quiz>) =>
         apiFetch<{ data: Quiz }>(`/admin/quizzes/${id}`, { method: 'PUT', body: JSON.stringify(payload) }),
     destroy: (id: string) => apiFetch<void>(`/admin/quizzes/${id}`, { method: 'DELETE' }),
+    export: () => apiFetch<Record<string, unknown>[]>('/admin/quizzes-export'),
+    import: (quizzes: Record<string, unknown>[]) =>
+        apiFetch<ImportSummary>('/admin/quizzes-import', { method: 'POST', body: JSON.stringify({ quizzes }) }),
 };
 
 export const AdminQuestionApi = {
@@ -97,6 +100,17 @@ export const AdminCategoryApi = {
     export: () => apiFetch<Record<string, unknown>[]>('/admin/categories-export'),
     import: (categories: Record<string, unknown>[]) =>
         apiFetch<ImportSummary>('/admin/categories-import', { method: 'POST', body: JSON.stringify({ categories }) }),
+};
+
+export interface ExportAllBundle {
+    topics: Record<string, unknown>[];
+    categories: Record<string, unknown>[];
+    questions: Record<string, unknown>[];
+    quizzes: Record<string, unknown>[];
+}
+
+export const AdminDataApi = {
+    exportAll: () => apiFetch<ExportAllBundle>('/admin/export-all'),
 };
 
 export const AdminInvitationApi = {

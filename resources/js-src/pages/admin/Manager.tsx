@@ -1,6 +1,13 @@
-import { useState } from 'react';
-import { FileQuestion, Folder, ListChecks, Tag } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Download, FileQuestion, Folder, ListChecks, Loader2, Tag, Upload } from 'lucide-react';
+import { toast } from 'sonner';
 import { Tabs, TabPanel } from '../../components/ui/Tabs';
+import { Button } from '../../components/ui/Button';
+import { AdminCategoryApi, AdminDataApi, AdminQuestionApi, AdminQuizApi, AdminTopicApi } from '../../api/quiz';
+import { apiErrorMessage } from '../../lib/apiErrorMessage';
+import { ApiError } from '../../api/client';
+import { assertBundleShape, runMultiPhaseImport } from '../../lib/importRunner';
+import { ImportAllSummaryDialog, initialImportAllRunState } from '../../components/ImportAllSummaryDialog';
 import { QuestionsTab } from './QuestionsTab';
 import { QuizzesTab } from './QuizzesTab';
 import { TopicsTab } from './TopicsTab';
@@ -15,10 +22,126 @@ const TABS = [
 
 export function Manager() {
     const [tab, setTab] = useState('questions');
+    const [exportingAll, setExportingAll] = useState(false);
+    const [importAllState, setImportAllState] = useState(initialImportAllRunState);
+    const importAllInput = useRef<HTMLInputElement>(null);
+
+    async function importAll(file: File) {
+        let data: unknown;
+
+        try {
+            data = JSON.parse(await file.text());
+        } catch {
+            toast.error('That file is not valid JSON');
+
+            return;
+        }
+
+        try {
+            assertBundleShape(data);
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'That file is not an "Export All Data" bundle.');
+
+            return;
+        }
+
+        setImportAllState({ ...initialImportAllRunState, open: true, running: true });
+
+        try {
+            const summary = await runMultiPhaseImport(
+                [
+                    { key: 'topics', label: 'topics', rows: data.topics ?? [], importChunk: (c) => AdminTopicApi.import(c) },
+                    {
+                        key: 'categories',
+                        label: 'categories',
+                        rows: data.categories ?? [],
+                        importChunk: (c) => AdminCategoryApi.import(c),
+                    },
+                    {
+                        key: 'questions',
+                        label: 'questions',
+                        rows: data.questions ?? [],
+                        importChunk: (c) => AdminQuestionApi.import(c),
+                    },
+                    { key: 'quizzes', label: 'quizzes', rows: data.quizzes ?? [], importChunk: (c) => AdminQuizApi.import(c) },
+                ],
+                (progress) =>
+                    setImportAllState((s) => ({
+                        ...s,
+                        phaseLabel: progress.phaseLabel,
+                        phaseIndex: progress.phaseIndex,
+                        totalPhases: progress.totalPhases,
+                        progress: { done: progress.done, total: progress.total },
+                    })),
+            );
+
+            setImportAllState((s) => ({ ...s, running: false, summary }));
+
+            const totalImported = Object.values(summary).reduce((sum, r) => sum + r.imported, 0);
+            const totalFailed = Object.values(summary).reduce((sum, r) => sum + r.failed, 0);
+            toast.success(`Imported ${totalImported} records, ${totalFailed} failed`);
+        } catch (error) {
+            const message = error instanceof ApiError ? error.message : 'Import failed — check the file and try again.';
+            setImportAllState((s) => ({ ...s, running: false, error: message }));
+            toast.error(message);
+        }
+    }
+
+    async function exportAll() {
+        setExportingAll(true);
+
+        try {
+            const bundle = await AdminDataApi.exportAll();
+            const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `quiz-manager-export-${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            const total =
+                bundle.topics.length + bundle.categories.length + bundle.questions.length + bundle.quizzes.length;
+            toast.success(
+                `Exported ${total} records (${bundle.topics.length} topics, ${bundle.categories.length} categories, ` +
+                    `${bundle.questions.length} questions, ${bundle.quizzes.length} quizzes)`,
+            );
+        } catch (error) {
+            toast.error(apiErrorMessage(error, 'Failed to export data'));
+        } finally {
+            setExportingAll(false);
+        }
+    }
 
     return (
         <div className="mx-auto max-w-5xl px-4 py-10">
-            <h1 className="text-2xl font-bold text-gray-900">Quiz Manager</h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold text-gray-900">Quiz Manager</h1>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" onClick={() => importAllInput.current?.click()} disabled={importAllState.running}>
+                        <Upload className="h-4 w-4" aria-hidden />
+                        Import All Data
+                    </Button>
+                    <input
+                        ref={importAllInput}
+                        type="file"
+                        accept=".json,application/json"
+                        className="hidden"
+                        onChange={(e) => {
+                            if (e.target.files?.[0]) importAll(e.target.files[0]);
+                            e.target.value = '';
+                        }}
+                    />
+                    <Button variant="outline" onClick={exportAll} disabled={exportingAll}>
+                        {exportingAll ? (
+                            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                        ) : (
+                            <Download className="h-4 w-4" aria-hidden />
+                        )}
+                        Export All Data
+                    </Button>
+                </div>
+            </div>
 
             <div className="mt-6">
                 <Tabs value={tab} onValueChange={setTab} tabs={TABS}>
@@ -36,6 +159,8 @@ export function Manager() {
                     </TabPanel>
                 </Tabs>
             </div>
+
+            <ImportAllSummaryDialog state={importAllState} onClose={() => setImportAllState(initialImportAllRunState)} />
         </div>
     );
 }

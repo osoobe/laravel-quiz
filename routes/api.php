@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\CategoryCrudController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\CategoryIoController;
+use Osoobe\Quiz\Http\Controllers\Api\Admin\DataExportController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\InvitationController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\QuestionCrudController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\QuestionIoController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\QuizCrudController as AdminQuizCrudController;
+use Osoobe\Quiz\Http\Controllers\Api\Admin\QuizIoController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\TopicCrudController;
 use Osoobe\Quiz\Http\Controllers\Api\Admin\TopicIoController;
 use Osoobe\Quiz\Http\Controllers\Api\AttemptController;
@@ -62,5 +64,10 @@ Route::middleware(config('quiz.route.api_middleware', ['api']))
 
                 Route::get('topics-export', [TopicIoController::class, 'export'])->name('topics.export');
                 Route::post('topics-import', [TopicIoController::class, 'import'])->name('topics.import');
+
+                Route::get('quizzes-export', [QuizIoController::class, 'export'])->name('quizzes.export');
+                Route::post('quizzes-import', [QuizIoController::class, 'import'])->name('quizzes.import');
+
+                Route::get('export-all', [DataExportController::class, 'exportAll'])->name('export-all');
             });
     });

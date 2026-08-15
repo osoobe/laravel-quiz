@@ -1,4 +1,5 @@
 import type { ImportSummary } from '../api/types';
+import type { ExportAllBundle } from '../api/quiz';
 
 /**
  * Cheap client-side sanity check before sending anything over the network — catches
@@ -58,4 +59,71 @@ export async function runChunkedImport<T>(
     }
 
     return { imported, failed, errors };
+}
+
+/**
+ * Validates an uploaded file matches the shape produced by "Export All Data"
+ * ({ topics, categories, questions, quizzes }, each an array) before running
+ * anything — sections may be omitted, but present ones must be arrays.
+ */
+export function assertBundleShape(data: unknown): asserts data is Partial<ExportAllBundle> {
+    if (typeof data !== 'object' || data === null || Array.isArray(data)) {
+        throw new Error(
+            'This file must be a JSON object with topics/categories/questions/quizzes arrays, matching the "Export All Data" format.',
+        );
+    }
+
+    const bundle = data as Record<string, unknown>;
+    const knownKeys = ['topics', 'categories', 'questions', 'quizzes'] as const;
+
+    for (const key of knownKeys) {
+        if (key in bundle && !Array.isArray(bundle[key])) {
+            throw new Error(`"${key}" must be an array in this file.`);
+        }
+    }
+
+    const hasAnyRows = knownKeys.some((key) => Array.isArray(bundle[key]) && (bundle[key] as unknown[]).length > 0);
+
+    if (!hasAnyRows) {
+        throw new Error('This file does not contain any topics, categories, questions, or quizzes to import.');
+    }
+}
+
+export interface ImportPhase {
+    key: string;
+    label: string;
+    rows: Record<string, unknown>[];
+    importChunk: (chunk: Record<string, unknown>[]) => Promise<ImportSummary>;
+}
+
+export interface MultiPhaseProgress {
+    phaseLabel: string;
+    phaseIndex: number;
+    totalPhases: number;
+    done: number;
+    total: number;
+}
+
+/**
+ * Runs each phase's rows through runChunkedImport in order — critical here, since
+ * questions and quizzes reference topics/categories by name and must be imported
+ * after them. Phases with no rows are skipped entirely rather than shown as an
+ * empty 0/0 step.
+ */
+export async function runMultiPhaseImport(
+    phases: ImportPhase[],
+    onProgress: (progress: MultiPhaseProgress) => void,
+): Promise<Record<string, ImportSummary>> {
+    const activePhases = phases.filter((phase) => phase.rows.length > 0);
+    const results: Record<string, ImportSummary> = {};
+
+    for (let index = 0; index < activePhases.length; index++) {
+        const phase = activePhases[index];
+
+        results[phase.key] = await runChunkedImport(phase.rows, phase.importChunk, (done, total) =>
+            onProgress({ phaseLabel: phase.label, phaseIndex: index, totalPhases: activePhases.length, done, total }),
+        );
+    }
+
+    return results;
 }
