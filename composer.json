@@ -1,0 +1,35 @@
+{
+    "name": "osoobe/laravel-quiz",
+    "description": "Full quiz management, taking and leaderboard package for Laravel, with a self-contained React frontend.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "illuminate/database": "^11.0|^12.0|^13.0",
+        "laravel/sanctum": "^4.0"
+    },
+    "suggest": {
+        "spatie/laravel-permission": "Required to use the spatie auth driver (quiz.auth_driver = spatie)."
+    },
+    "autoload": {
+        "psr-4": {
+            "Osoobe\\Quiz\\": "src/",
+            "Osoobe\\Quiz\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Osoobe\\Quiz\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Osoobe\\Quiz\\QuizServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

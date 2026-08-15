@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+    --color-quiz-primary: #16a34a;
+    --color-quiz-primary-foreground: #ffffff;
+    --color-quiz-bg: #f7faf8;
+    --color-quiz-border: #e5e7eb;
+    --color-quiz-muted: #6b7280;
+    --color-quiz-accent: #ecfdf5;
+
+    --color-quiz-easy: #16a34a;
+    --color-quiz-medium: #d97706;
+    --color-quiz-hard: #ea580c;
+    --color-quiz-expert: #dc2626;
+}
+
+body {
+    background-color: var(--color-quiz-bg);
+    color: #111827;
+}
