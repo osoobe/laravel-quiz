@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\User;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Osoobe\Quiz\Enums\QuizRole;
 
 return [
 
     // The host app's User model. Must implement Osoobe\Quiz\Contracts\QuizUser.
-    'user_model' => env('QUIZ_USER_MODEL', App\Models\User::class),
+    'user_model' => env('QUIZ_USER_MODEL', User::class),
 
     // null       => auto-detect (spatie/laravel-permission if installed, else gate)
     // 'spatie'   => Osoobe\Quiz\Auth\SpatieQuizAuthorizer
@@ -15,11 +17,18 @@ return [
 
     // Role names treated as quiz staff when auth_driver = spatie (full manage + attempt-limit bypass).
     // When auth_driver = gate, define a `quiz.staff` Gate instead — this array is unused.
-    'staff_roles' => ['super_admin', 'admin', 'moderator'],
+    'staff_roles' => [
+        QuizRole::Owner->value,
+        QuizRole::Admin->value,
+        QuizRole::Moderator->value,
+    ],
 
     // Roles allowed to manage private-quiz invitations, in addition to the quiz creator.
     // When auth_driver = gate, define a `quiz.manage-invitations` Gate instead.
-    'invitation_manager_roles' => ['super_admin', 'moderator'],
+    'invitation_manager_roles' => [
+        QuizRole::Owner->value,
+        QuizRole::Admin->value,
+    ],
 
     'route' => [
         'prefix' => 'quizzes',            // public SPA prefix (catalogue, taker, admin, ...)

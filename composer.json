@@ -15,7 +15,8 @@
     "autoload": {
         "psr-4": {
             "Osoobe\\Quiz\\": "src/",
-            "Osoobe\\Quiz\\Database\\Factories\\": "database/factories/"
+            "Osoobe\\Quiz\\Database\\Factories\\": "database/factories/",
+            "Osoobe\\Quiz\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
