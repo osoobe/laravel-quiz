@@ -215,6 +215,42 @@ npm install
 npm run build   # writes resources/dist/, which the package commits and ships
 ```
 
+## Running the tests
+
+The package's Pest suite is fully standalone — it boots itself via
+[Orchestra Testbench](https://packages.tools/testbench/) and
+[Workbench](https://packages.tools/testbench/workbench.html) rather than depending on
+a host Laravel app, so it runs the same whether or not this package is installed
+anywhere yet:
+
+```bash
+cd devpackage/laravel-quiz   # or wherever this package lives once extracted
+composer install
+composer test                # or: vendor/bin/pest
+```
+
+A few things worth knowing if you're touching the test setup itself:
+
+- `tests/TestCase.php` extends `Orchestra\Testbench\TestCase` and pulls in
+  `WithWorkbench` — `testbench.yaml` lists `Osoobe\Quiz\QuizServiceProvider` and
+  `Spatie\Permission\PermissionServiceProvider` as the providers to boot, and points
+  at this package's own `database/migrations` in addition to `workbench/database/migrations`.
+- `workbench/app/Models/User.php` is a minimal stand-in for a host app's own `User`
+  model — it implements `QuizUser` and uses `HasQuizAttempts`, exactly like a real
+  host would, so the tests exercise the actual contract rather than a shortcut.
+- `spatie/laravel-permission` is a `require-dev` dependency of the package (not a
+  runtime `require` — the `gate` driver needs none of it), so it's always available
+  under test; the two suites that need real Spatie role storage
+  (`SpatieQuizAuthorizerRealRolesTest`, `QuizRoleSeederTest`) load its
+  `create_permission_tables` migration stub directly in a `beforeEach()`, since Spatie
+  ships it as a publishable file rather than an auto-run migration.
+- `tests/Fixtures/quizdata/` holds the real sample topics/categories/questions data
+  used by `SampleDataImportTest` and `ImportAllDataRoundTripTest` to exercise the
+  bulk-import endpoints against realistic volume, not synthetic factory data.
+- CI lives at `.github/workflows/tests.yml` in this package's own repo — a plain
+  `composer install && vendor/bin/pest` job, plus a frontend build/typecheck job and
+  an advisory (non-blocking) Pint job.
+
 ## Optional: attaching a quiz to a host entity (event, course, cohort…)
 
 ```php

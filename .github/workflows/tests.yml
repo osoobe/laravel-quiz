@@ -1,0 +1,88 @@
+name: Tests
+
+# Runs entirely standalone from this package's own repo — no host Laravel app
+# required. tests/TestCase.php boots the package via Orchestra Testbench +
+# Workbench (see testbench.yaml and workbench/), so `composer install` here is
+# enough on its own.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: laravel-quiz-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php-tests:
+    name: PHP tests (Pest via Testbench)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, pdo_sqlite, sqlite3, bcmath, intl, curl, zip, gd
+          coverage: none
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.json') }}
+          restore-keys: composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run test suite
+        run: vendor/bin/pest
+
+  frontend:
+    name: Frontend build & typecheck (SPA)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      # The React SPA ships pre-built (resources/dist/ is committed) — this doesn't
+      # publish anything, it just proves resources/js-src/ still compiles cleanly.
+      - name: Build
+        run: npm run build
+
+  style:
+    name: Code style (Pint, advisory)
+    runs-on: ubuntu-latest
+    # Non-blocking: there's pre-existing Pint debt across this package predating
+    # this workflow. Flip off once that's cleaned up.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: laravel/pint
+
+      - name: Run Pint
+        run: pint --test

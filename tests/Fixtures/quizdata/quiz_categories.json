@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Agile & Project Management",
+    "description": "Frameworks and practices for managing software development projects."
+  },
+  {
+    "name": "Algorithms",
+    "description": "Step-by-step procedures and logic used to solve computational problems."
+  },
+  {
+    "name": "API Design & Integration",
+    "description": "Designing and consuming application programming interfaces for system communication."
+  },
+  {
+    "name": "Backend Development",
+    "description": "Server-side logic, databases, APIs, and application architecture."
+  },
+  {
+    "name": "Big Data & Data Engineering",
+    "description": "Processing and managing large-scale data systems."
+  },
+  {
+    "name": "Cloud Computing",
+    "description": "On-demand computing resources delivered over the internet."
+  },
+  {
+    "name": "Computer Networking",
+    "description": "Principles of data communication, networking models, and internet protocols."
+  },
+  {
+    "name": "Cryptography",
+    "description": "Techniques for securing information through encryption and decryption."
+  },
+  {
+    "name": "Cybersecurity & Secure Coding",
+    "description": "Protecting systems and writing code resilient to security threats."
+  },
+  {
+    "name": "Data Science & Analytics",
+    "description": "Extracting insights from data using statistics and computational methods."
+  },
+  {
+    "name": "Data Structures",
+    "description": "Ways of organizing and storing data efficiently for access and modification."
+  },
+  {
+    "name": "Databases & Data Management",
+    "description": "Concepts related to storing, querying, and managing structured and unstructured data."
+  },
+  {
+    "name": "Dev Tooling & Build Systems",
+    "description": "Tools that support development, compilation, and deployment workflows."
+  },
+  {
+    "name": "DevOps & CI/CD",
+    "description": "Practices that combine development and operations to automate software delivery."
+  },
+  {
+    "name": "Distributed Systems",
+    "description": "Systems where components run on multiple machines and coordinate via networks."
+  },
+  {
+    "name": "Ethics, Privacy & Compliance",
+    "description": "Ethical considerations, data privacy, and regulatory compliance in technology."
+  },
+  {
+    "name": "Frontend Development",
+    "description": "Client-side development focusing on user interfaces and user experience."
+  },
+  {
+    "name": "Functional Programming",
+    "description": "Programming paradigm that treats computation as the evaluation of mathematical functions."
+  },
+  {
+    "name": "Human-Computer Interaction",
+    "description": "Designing systems that improve interaction between humans and computers."
+  },
+  {
+    "name": "Machine Learning & AI",
+    "description": "Systems that learn from data and perform intelligent tasks."
+  },
+  {
+    "name": "Mobile Application Development",
+    "description": "Development of applications for mobile devices such as Android and iOS."
+  },
+  {
+    "name": "Object-Oriented Programming",
+    "description": "Programming paradigm based on objects, classes, inheritance, and polymorphism."
+  },
+  {
+    "name": "Operating Systems",
+    "description": "Software that manages hardware resources and provides services to applications."
+  },
+  {
+    "name": "Performance Optimization",
+    "description": "Improving application speed, efficiency, and resource usage."
+  },
+  {
+    "name": "Programming Fundamentals",
+    "description": "Basic programming concepts such as variables, loops, conditionals, and functions."
+  },
+  {
+    "name": "Software Engineering",
+    "description": "Best practices and methodologies for designing and maintaining software systems."
+  },
+  {
+    "name": "System Design & Architecture",
+    "description": "Designing scalable, reliable, and maintainable software systems."
+  },
+  {
+    "name": "Testing & Quality Assurance",
+    "description": "Techniques for validating software correctness and reliability."
+  },
+  {
+    "name": "Version Control Systems",
+    "description": "Tools and concepts for tracking and managing changes in source code."
+  },
+  {
+    "name": "Web Development",
+    "description": "Technologies and concepts used to build websites and web applications."
+  }
+]

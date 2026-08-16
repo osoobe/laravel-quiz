@@ -1,0 +1,362 @@
+[
+  {
+    "name": "Abstraction",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Adjacency Lists",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Architecture",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Arrays",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Backtracking",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Basic Problem Solving",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Best Practices",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Big-O Notation",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Binary Search",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Bloom Filters",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Breadth-First Search",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Brute Force Methods",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Circular Buffers",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Classes and Objects",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Code Readability",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Command Line Basics",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Comments and Documentation",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Common Pitfalls",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Concurrency",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Conditional Statements",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Configuration Management",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Constants",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Constructors",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Control Flow",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Data Access Patterns",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Debugging",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Deployment",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Depth-First Search",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Deque",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Design Patterns",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Design Principles",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Divide and Conquer",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Documentation",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Dynamic Arrays",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Dynamic Programming",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Encapsulation",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Error Handling",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Fault Tolerance",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Functions",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Graph Traversal",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Graphs",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Greedy Algorithms",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Hash Tables",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Heaps",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Indexing",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Inheritance",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Input and Output",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Interfaces",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Linked Lists",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Logging",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Loops",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Maintainability",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Maps",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Mathematical Logic",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Memory Concepts",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Method Overriding",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Monitoring",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Object Lifecycle",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Operators",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Optimization Techniques",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Parallelism",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Performance Tuning",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Polymorphism",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Priority Queues",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Program Execution",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Pseudocode",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Queues",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Randomized Techniques",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Recursion",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Resource Management",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Scalability",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Scope",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Searching Algorithms",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Security Fundamentals",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Sets",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Shortest Path Algorithms",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Sorting Algorithms",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Space Complexity",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Sparse Arrays",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Stacks",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "String Processing",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "System Integration",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Testing Strategies",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Time Complexity",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Tooling",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Trees",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Tries",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Type Casting",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Using IDEs",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  },
+  {
+    "name": "Variables and Data Types",
+    "description": "A general computer science concept commonly used to assess understanding and practical application."
+  }
+]
