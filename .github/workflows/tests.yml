@@ -30,6 +30,12 @@ jobs:
           extensions: mbstring, dom, fileinfo, pdo_sqlite, sqlite3, bcmath, intl, curl, zip, gd
           coverage: none
 
+      # Anonymous requests to codeload.github.com are rate-limited (HTTP 429) and have
+      # no source fallback for "legacy.zip" dists — hits intermittently on packages like
+      # pestphp/pest-plugin-arch, orchestra/sidekick. The run's own token raises the limit.
+      - name: Authenticate Composer against GitHub
+        run: composer config -g github-oauth.github.com "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
