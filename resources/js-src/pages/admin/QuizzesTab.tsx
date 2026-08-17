@@ -15,6 +15,7 @@ import { DifficultyBadge } from '../../components/DifficultyBadge';
 import { AudienceBadge } from '../../components/AudienceBadge';
 import { ItemCodeField } from '../../components/ItemCodeField';
 import { ItemCodeBadge } from '../../components/ItemCodeBadge';
+import { useDirtyFormReporter } from '../../lib/useDirtyFormReporter';
 import type { Category, Difficulty, Quiz, Topic } from '../../api/types';
 
 interface QuizForm {
@@ -47,13 +48,16 @@ const emptyForm: QuizForm = {
     itemcode: '',
 };
 
-export function QuizzesTab() {
+export function QuizzesTab({ onDirtyChange }: { onDirtyChange: (dirty: boolean) => void }) {
     const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
     const [topics, setTopics] = useState<Topic[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [editing, setEditing] = useState<Quiz | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [form, setForm] = useState<QuizForm>(emptyForm);
+    const [formBaseline, setFormBaseline] = useState<QuizForm>(emptyForm);
+
+    useDirtyFormReporter(dialogOpen && JSON.stringify(form) !== JSON.stringify(formBaseline), onDirtyChange);
 
     function load() {
         AdminQuizApi.index()
@@ -77,12 +81,12 @@ export function QuizzesTab() {
     function openCreate() {
         setEditing(null);
         setForm(emptyForm);
+        setFormBaseline(emptyForm);
         setDialogOpen(true);
     }
 
     function openEdit(quiz: Quiz) {
-        setEditing(quiz);
-        setForm({
+        const next: QuizForm = {
             name: quiz.name,
             description: quiz.description ?? '',
             topic_ids: quiz.topic_ids,
@@ -95,7 +99,10 @@ export function QuizzesTab() {
             randomize_questions: quiz.randomize_questions,
             is_active: quiz.is_active,
             itemcode: quiz.itemcode ?? '',
-        });
+        };
+        setEditing(quiz);
+        setForm(next);
+        setFormBaseline(next);
         setDialogOpen(true);
     }
 

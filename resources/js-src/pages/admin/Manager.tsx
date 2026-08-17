@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useBlocker, useSearchParams } from 'react-router-dom';
 import { Download, FileQuestion, Folder, ListChecks, Loader2, Tag, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { Tabs, TabPanel } from '../../components/ui/Tabs';
@@ -19,12 +20,54 @@ const TABS = [
     { value: 'topics', label: 'Topics', icon: <Folder className="h-4 w-4" aria-hidden /> },
     { value: 'categories', label: 'Categories', icon: <Tag className="h-4 w-4" aria-hidden /> },
 ];
+const TAB_VALUES = TABS.map((t) => t.value);
+const DEFAULT_TAB = TAB_VALUES[0];
 
 export function Manager() {
-    const [tab, setTab] = useState('questions');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const requestedTab = searchParams.get('tab');
+    const tab = requestedTab && TAB_VALUES.includes(requestedTab) ? requestedTab : DEFAULT_TAB;
+
+    function setTab(next: string) {
+        setSearchParams((prev) => {
+            const params = new URLSearchParams(prev);
+            params.set('tab', next);
+            return params;
+        });
+    }
+
     const [exportingAll, setExportingAll] = useState(false);
     const [importAllState, setImportAllState] = useState(initialImportAllRunState);
     const importAllInput = useRef<HTMLInputElement>(null);
+
+    // Any tab's open Add/Edit dialog reports its unsaved-edit status here (only one tab
+    // is ever mounted at a time, so at most one can be dirty) — used to confirm before
+    // an in-app navigation or a real page refresh/close would silently discard it.
+    const [formDirty, setFormDirty] = useState(false);
+    const blocker = useBlocker(formDirty);
+
+    useEffect(() => {
+        if (blocker.state !== 'blocked') return;
+
+        if (window.confirm('You have unsaved changes. Leaving now will discard them. Continue?')) {
+            blocker.proceed();
+        } else {
+            blocker.reset();
+        }
+    }, [blocker]);
+
+    useEffect(() => {
+        if (!formDirty) return;
+
+        function handleBeforeUnload(event: BeforeUnloadEvent) {
+            event.preventDefault();
+            event.returnValue = '';
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [formDirty]);
 
     async function importAll(file: File) {
         let data: unknown;
@@ -146,16 +189,16 @@ export function Manager() {
             <div className="mt-6">
                 <Tabs value={tab} onValueChange={setTab} tabs={TABS}>
                     <TabPanel value="questions">
-                        <QuestionsTab />
+                        <QuestionsTab onDirtyChange={setFormDirty} />
                     </TabPanel>
                     <TabPanel value="quizzes">
-                        <QuizzesTab />
+                        <QuizzesTab onDirtyChange={setFormDirty} />
                     </TabPanel>
                     <TabPanel value="topics">
-                        <TopicsTab />
+                        <TopicsTab onDirtyChange={setFormDirty} />
                     </TabPanel>
                     <TabPanel value="categories">
-                        <CategoriesTab />
+                        <CategoriesTab onDirtyChange={setFormDirty} />
                     </TabPanel>
                 </Tabs>
             </div>

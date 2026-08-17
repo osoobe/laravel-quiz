@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 import { Catalogue } from './pages/Catalogue';
 import { Taker } from './pages/Taker';
@@ -7,6 +7,20 @@ import { Leaderboard } from './pages/Leaderboard';
 import { Results } from './pages/Results';
 import { Manager } from './pages/admin/Manager';
 import { Invitations } from './pages/admin/Invitations';
+
+// A data router (rather than <BrowserRouter>/<Routes>) is required for useBlocker,
+// which Manager uses to confirm before navigating away from an unsaved form.
+const router = createBrowserRouter(
+    [
+        { path: '/', element: <Catalogue /> },
+        { path: '/admin', element: <Manager /> },
+        { path: '/admin/quizzes/:quizId/invitations', element: <Invitations /> },
+        { path: '/:quizId/leaderboard', element: <Leaderboard /> },
+        { path: '/:quizId/results', element: <Results /> },
+        { path: '/:quizId', element: <Taker /> },
+    ],
+    { basename: window.QuizConfig.basePath },
+);
 
 export function App() {
     // Surfaces whatever the host redirected in with — lets a host page's
@@ -20,16 +34,9 @@ export function App() {
     }, []);
 
     return (
-        <BrowserRouter basename={window.QuizConfig.basePath}>
+        <>
             <Toaster position="top-right" richColors />
-            <Routes>
-                <Route path="/" element={<Catalogue />} />
-                <Route path="/admin" element={<Manager />} />
-                <Route path="/admin/quizzes/:quizId/invitations" element={<Invitations />} />
-                <Route path="/:quizId/leaderboard" element={<Leaderboard />} />
-                <Route path="/:quizId/results" element={<Results />} />
-                <Route path="/:quizId" element={<Taker />} />
-            </Routes>
-        </BrowserRouter>
+            <RouterProvider router={router} />
+        </>
     );
 }

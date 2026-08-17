@@ -14,16 +14,22 @@ import { EmptyState } from '../../components/EmptyState';
 import { ImportSummaryDialog, initialImportRunState } from '../../components/ImportSummaryDialog';
 import { ItemCodeField } from '../../components/ItemCodeField';
 import { ItemCodeBadge } from '../../components/ItemCodeBadge';
+import { useDirtyFormReporter } from '../../lib/useDirtyFormReporter';
 import type { Category } from '../../api/types';
 
-export function CategoriesTab() {
+const emptyForm = { name: '', description: '', is_active: true, itemcode: '' };
+
+export function CategoriesTab({ onDirtyChange }: { onDirtyChange: (dirty: boolean) => void }) {
     const [categories, setCategories] = useState<Category[] | null>(null);
     const [editing, setEditing] = useState<Category | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [form, setForm] = useState({ name: '', description: '', is_active: true, itemcode: '' });
+    const [form, setForm] = useState(emptyForm);
+    const [formBaseline, setFormBaseline] = useState(emptyForm);
     const [exporting, setExporting] = useState(false);
     const [importState, setImportState] = useState(() => initialImportRunState('categories'));
     const importInput = useRef<HTMLInputElement>(null);
+
+    useDirtyFormReporter(dialogOpen && JSON.stringify(form) !== JSON.stringify(formBaseline), onDirtyChange);
 
     function load() {
         AdminCategoryApi.index()
@@ -38,18 +44,21 @@ export function CategoriesTab() {
 
     function openCreate() {
         setEditing(null);
-        setForm({ name: '', description: '', is_active: true, itemcode: '' });
+        setForm(emptyForm);
+        setFormBaseline(emptyForm);
         setDialogOpen(true);
     }
 
     function openEdit(category: Category) {
-        setEditing(category);
-        setForm({
+        const next = {
             name: category.name,
             description: category.description ?? '',
             is_active: category.is_active,
             itemcode: category.itemcode ?? '',
-        });
+        };
+        setEditing(category);
+        setForm(next);
+        setFormBaseline(next);
         setDialogOpen(true);
     }
 
