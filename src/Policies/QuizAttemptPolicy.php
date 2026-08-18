@@ -10,9 +10,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class QuizAttemptPolicy
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function view(QuizUser $user, QuizAttempt $attempt): bool
     {

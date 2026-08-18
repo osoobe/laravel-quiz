@@ -5,7 +5,6 @@ namespace Osoobe\Quiz\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Osoobe\Quiz\Actions\StartAttempt;
 use Osoobe\Quiz\Actions\SubmitAttempt;
-use Osoobe\Quiz\Enums\AttemptStatus;
 use Osoobe\Quiz\Exceptions\QuizAccessDeniedException;
 use Osoobe\Quiz\Http\Requests\SubmitAttemptRequest;
 use Osoobe\Quiz\Http\Resources\PublicQuestionResource;
@@ -20,8 +19,7 @@ class AttemptController
     public function __construct(
         private StartAttempt $startAttempt,
         private SubmitAttempt $submitAttempt,
-    ) {
-    }
+    ) {}
 
     public function store(Request $request, Quiz $quiz)
     {

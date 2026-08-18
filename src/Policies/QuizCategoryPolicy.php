@@ -8,9 +8,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class QuizCategoryPolicy
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function viewAny(?QuizUser $user): bool
     {

@@ -8,9 +8,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class EnsureQuizStaff
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function handle(Request $request, Closure $next)
     {

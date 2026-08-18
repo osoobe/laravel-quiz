@@ -10,9 +10,7 @@ use Osoobe\Quiz\Models\Quiz;
 
 class AttemptLimiter
 {
-    public function __construct(private QuizAuthorizer $authorizer)
-    {
-    }
+    public function __construct(private QuizAuthorizer $authorizer) {}
 
     /**
      * Must run inside the same transaction as the attempt insert (see Actions\StartAttempt)

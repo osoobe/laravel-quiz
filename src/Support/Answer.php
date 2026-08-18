@@ -2,19 +2,20 @@
 
 namespace Osoobe\Quiz\Support;
 
+use Illuminate\Support\Str;
+
 class Answer
 {
     public function __construct(
         public readonly string $id,
         public readonly string $text,
         public readonly bool $isCorrect,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data['id'] ?? (string) \Illuminate\Support\Str::uuid(),
+            id: $data['id'] ?? (string) Str::uuid(),
             text: (string) ($data['text'] ?? ''),
             isCorrect: (bool) ($data['is_correct'] ?? false),
         );
