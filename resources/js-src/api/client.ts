@@ -22,13 +22,7 @@ function ensureCsrfCookie(): Promise<void> {
     return csrfCookieReady;
 }
 
-export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-    const method = (options.method ?? 'GET').toUpperCase();
-
-    if (method !== 'GET' && method !== 'HEAD') {
-        await ensureCsrfCookie();
-    }
-
+function performRequest(path: string, options: RequestInit, method: string): Promise<Response> {
     const headers = new Headers(options.headers);
     headers.set('Accept', 'application/json');
 
@@ -42,12 +36,32 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
         headers.set('X-XSRF-TOKEN', xsrfToken);
     }
 
-    const response = await fetch(`${window.QuizConfig.apiBase}${path}`, {
+    return fetch(`${window.QuizConfig.apiBase}${path}`, {
         ...options,
         method,
         headers,
         credentials: 'include',
     });
+}
+
+export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+    const method = (options.method ?? 'GET').toUpperCase();
+    const isMutating = method !== 'GET' && method !== 'HEAD';
+
+    if (isMutating) {
+        await ensureCsrfCookie();
+    }
+
+    let response = await performRequest(path, options, method);
+
+    // A memoized CSRF cookie can go stale while the SPA sits open (idle session
+    // lifetime, session eviction, etc.) since tab navigation never reloads the page
+    // to re-prime it. Re-prime once and retry before giving up.
+    if (isMutating && response.status === 419) {
+        csrfCookieReady = null;
+        await ensureCsrfCookie();
+        response = await performRequest(path, options, method);
+    }
 
     if (!response.ok) {
         let payload: { message?: string; error_code?: string; errors?: Record<string, string[]> } | null = null;

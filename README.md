@@ -204,6 +204,52 @@ mode — no CORS configuration, no token storage. The package applies
 `EnsureFrontendRequestsAreStateful` itself and auto-appends `config('app.url')`'s host to
 `sanctum.stateful` on boot, so there's nothing to configure in the common case.
 
+### Embedding the shell in your own layout/chrome
+
+The SPA doesn't require Inertia or React on the host — `ShellController` renders one
+Blade view (`config('quiz.view.shell')`, `quiz::app` by default) that mounts the whole
+app into a single `<div id="quiz-root">`. That view is already a normal, overridable
+Blade view, so a host can make the quiz section visually part of the app — same nav,
+same header, same theme — without the package depending on how the host renders
+anything else:
+
+```bash
+php artisan vendor:publish --tag=quiz-views
+```
+
+This copies `resources/views` to `resources/views/vendor/quiz/`, which Laravel's view
+resolver checks before falling back to the package's own copy. Edit
+`resources/views/vendor/quiz/app.blade.php` to wrap the required elements in your own
+layout, e.g. a Blade layout component:
+
+```blade
+<x-app-layout>
+    <meta name="csrf-token" content="{{ $bootstrap['csrfToken'] }}">
+    @foreach ($quizCss as $href)
+        <link rel="stylesheet" href="{{ $href }}">
+    @endforeach
+
+    <div id="quiz-root"></div>
+    <script>window.QuizConfig = {!! \Illuminate\Support\Js::from($bootstrap) !!};</script>
+    @if ($quizJs)
+        <script type="module" src="{{ $quizJs }}"></script>
+    @endif
+</x-app-layout>
+```
+
+The four elements above (`csrf-token` meta tag, the `$quizCss` stylesheets, the
+`#quiz-root` mount point, and `window.QuizConfig`) are the only things the React app
+actually needs — everything else (nav, header, footer, dark-mode toggle, whatever
+your layout already renders) is free real estate around it. Re-run the publish
+command after upgrading the package if you've customized this file.
+
+`$bootstrap` (exposed to the frontend as `window.QuizConfig`) also mirrors your app's
+own flash session keys — `message`, `error`, and `bulk_errors` — the same three keys
+used project-wide (see the root `CLAUDE.md`), so a redirect *into* the SPA after a
+host-side action (e.g. `redirect()->route('quiz.shell', ['any' => $quiz->id])->with('message', 'Invitation sent')`)
+surfaces as a toast inside the SPA exactly like it would in a Blade or Inertia page.
+No wiring needed on the package side beyond what's already there.
+
 ## Developing the frontend
 
 The React source lives in `resources/js-src/`, built by this package's own toolchain —

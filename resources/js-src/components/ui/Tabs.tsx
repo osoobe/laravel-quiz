@@ -14,7 +14,7 @@ export function Tabs({
     children: ReactNode;
 }) {
     return (
-        <RadixTabs.Root value={value} onValueChange={onValueChange}>
+        <RadixTabs.Root value={value} onValueChange={onValueChange} activationMode="manual">
             <RadixTabs.List className="flex flex-wrap gap-1 rounded-lg bg-gray-100 p-1" aria-label="Quiz admin sections">
                 {tabs.map((tab) => (
                     <RadixTabs.Trigger

@@ -12,6 +12,7 @@ import { AnswerRepeater, type AnswerDraft } from '../../components/AnswerRepeate
 import { EmptyState } from '../../components/EmptyState';
 import { ImportSummaryDialog, initialImportRunState } from '../../components/ImportSummaryDialog';
 import { ItemCodeField } from '../../components/ItemCodeField';
+import { useDirtyFormReporter } from '../../lib/useDirtyFormReporter';
 import type { Category, Difficulty, Question, QuestionType, Topic } from '../../api/types';
 
 const emptyAnswers: AnswerDraft[] = [
@@ -19,7 +20,18 @@ const emptyAnswers: AnswerDraft[] = [
     { text: '', is_correct: false },
 ];
 
-export function QuestionsTab() {
+const emptyForm = {
+    question: '',
+    description: '',
+    topic_id: '',
+    category_id: '',
+    difficulty: 'medium' as Difficulty,
+    question_type: 'radio' as QuestionType,
+    answers: emptyAnswers,
+    itemcode: '',
+};
+
+export function QuestionsTab({ onDirtyChange }: { onDirtyChange: (dirty: boolean) => void }) {
     const [questions, setQuestions] = useState<Question[] | null>(null);
     const [topics, setTopics] = useState<Topic[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -31,16 +43,10 @@ export function QuestionsTab() {
     const [importState, setImportState] = useState(() => initialImportRunState('questions'));
     const importInput = useRef<HTMLInputElement>(null);
 
-    const [form, setForm] = useState({
-        question: '',
-        description: '',
-        topic_id: '',
-        category_id: '',
-        difficulty: 'medium' as Difficulty,
-        question_type: 'radio' as QuestionType,
-        answers: emptyAnswers,
-        itemcode: '',
-    });
+    const [form, setForm] = useState(emptyForm);
+    const [formBaseline, setFormBaseline] = useState(emptyForm);
+
+    useDirtyFormReporter(dialogOpen && JSON.stringify(form) !== JSON.stringify(formBaseline), onDirtyChange);
 
     function load() {
         AdminQuestionApi.index({ search: search || undefined, difficulty: difficulty || undefined })
@@ -63,22 +69,13 @@ export function QuestionsTab() {
 
     function openCreate() {
         setEditing(null);
-        setForm({
-            question: '',
-            description: '',
-            topic_id: '',
-            category_id: '',
-            difficulty: 'medium',
-            question_type: 'radio',
-            answers: emptyAnswers,
-            itemcode: '',
-        });
+        setForm(emptyForm);
+        setFormBaseline(emptyForm);
         setDialogOpen(true);
     }
 
     function openEdit(question: Question) {
-        setEditing(question);
-        setForm({
+        const next = {
             question: question.question,
             description: question.description ?? '',
             topic_id: question.topic?.id ?? '',
@@ -87,7 +84,10 @@ export function QuestionsTab() {
             question_type: question.question_type,
             answers: question.answers.map((a) => ({ id: a.id, text: a.text, is_correct: !!a.is_correct })),
             itemcode: question.itemcode ?? '',
-        });
+        };
+        setEditing(question);
+        setForm(next);
+        setFormBaseline(next);
         setDialogOpen(true);
     }
 

@@ -30,15 +30,40 @@ jobs:
           extensions: mbstring, dom, fileinfo, pdo_sqlite, sqlite3, bcmath, intl, curl, zip, gd
           coverage: none
 
+      # Anonymous requests to codeload.github.com are rate-limited (HTTP 429) and have
+      # no source fallback for "legacy.zip" dists — hits intermittently on packages like
+      # pestphp/pest-plugin-arch, orchestra/sidekick. Composer only auto-aliases
+      # api.github.com to the "github.com" auth entry — codeload.github.com (where the
+      # actual dist zips download from) needs its own entry to pick up the token.
+      - name: Authenticate Composer against GitHub
+        run: |
+          composer config -g github-oauth.github.com "${{ secrets.GITHUB_TOKEN }}"
+          composer config -g github-oauth.codeload.github.com "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.json') }}
+          path: |
+            vendor
+            ~/.cache/composer
+          key: composer-${{ hashFiles('composer.lock') }}
           restore-keys: composer-
 
+      # GitHub Actions' shared runner IPs see high aggregate traffic to
+      # codeload.github.com, and its abuse-detection rate limiting doesn't reliably
+      # clear within a few seconds — GitHub's own docs recommend waiting at least 60s
+      # after a secondary rate limit. Retry patiently rather than fail fast.
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: |
+          n=0
+          until [ $n -ge 5 ]; do
+            composer install --no-interaction --prefer-dist --optimize-autoloader && exit 0
+            n=$((n + 1))
+            echo "Composer install failed (attempt $n/5) — retrying in 60s..."
+            sleep 60
+          done
+          echo "Composer install failed after 5 attempts."
+          exit 1
 
       - name: Run test suite
         run: vendor/bin/pest

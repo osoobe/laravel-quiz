@@ -29,6 +29,11 @@ class ShellController
                     'isStaff' => app(QuizAuthorizer::class)->isStaff($user),
                 ] : null,
                 'loginUrl' => Route::has('login') ? route('login') : null,
+                'flash' => [
+                    'message' => session('message'),
+                    'error' => session('error'),
+                    'bulk_errors' => session('bulk_errors'),
+                ],
             ],
         ]);
     }

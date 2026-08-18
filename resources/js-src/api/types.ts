@@ -4,6 +4,8 @@ export interface QuizConfig {
     basePath: string;
     user: { id: string | number; name: string; avatarUrl: string | null; isStaff: boolean } | null;
     loginUrl: string | null;
+    /** Mirrors the host's own flash session keys (`message`/`error`/`bulk_errors`) so a redirect into the SPA still shows its flash. */
+    flash: { message: string | null; error: string | null; bulk_errors: string[] | null };
 }
 
 declare global {

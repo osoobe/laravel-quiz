@@ -14,16 +14,22 @@ import { EmptyState } from '../../components/EmptyState';
 import { ImportSummaryDialog, initialImportRunState } from '../../components/ImportSummaryDialog';
 import { ItemCodeField } from '../../components/ItemCodeField';
 import { ItemCodeBadge } from '../../components/ItemCodeBadge';
+import { useDirtyFormReporter } from '../../lib/useDirtyFormReporter';
 import type { Topic } from '../../api/types';
 
-export function TopicsTab() {
+const emptyForm = { name: '', description: '', is_active: true, itemcode: '' };
+
+export function TopicsTab({ onDirtyChange }: { onDirtyChange: (dirty: boolean) => void }) {
     const [topics, setTopics] = useState<Topic[] | null>(null);
     const [editing, setEditing] = useState<Topic | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [form, setForm] = useState({ name: '', description: '', is_active: true, itemcode: '' });
+    const [form, setForm] = useState(emptyForm);
+    const [formBaseline, setFormBaseline] = useState(emptyForm);
     const [exporting, setExporting] = useState(false);
     const [importState, setImportState] = useState(() => initialImportRunState('topics'));
     const importInput = useRef<HTMLInputElement>(null);
+
+    useDirtyFormReporter(dialogOpen && JSON.stringify(form) !== JSON.stringify(formBaseline), onDirtyChange);
 
     function load() {
         AdminTopicApi.index()
@@ -38,18 +44,21 @@ export function TopicsTab() {
 
     function openCreate() {
         setEditing(null);
-        setForm({ name: '', description: '', is_active: true, itemcode: '' });
+        setForm(emptyForm);
+        setFormBaseline(emptyForm);
         setDialogOpen(true);
     }
 
     function openEdit(topic: Topic) {
-        setEditing(topic);
-        setForm({
+        const next = {
             name: topic.name,
             description: topic.description ?? '',
             is_active: topic.is_active,
             itemcode: topic.itemcode ?? '',
-        });
+        };
+        setEditing(topic);
+        setForm(next);
+        setFormBaseline(next);
         setDialogOpen(true);
     }
 
