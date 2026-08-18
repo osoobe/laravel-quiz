@@ -10,9 +10,7 @@ use Osoobe\Quiz\Models\Quiz;
 
 class QuizAccess
 {
-    public function __construct(private QuizAuthorizer $authorizer)
-    {
-    }
+    public function __construct(private QuizAuthorizer $authorizer) {}
 
     public function isStaff(Authenticatable $user): bool
     {

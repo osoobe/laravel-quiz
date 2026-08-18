@@ -8,9 +8,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class QuizQuestionPolicy
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     // Non-nullable $user: Laravel denies guests before the method even runs (questions
     // require authentication, unlike topics/categories).

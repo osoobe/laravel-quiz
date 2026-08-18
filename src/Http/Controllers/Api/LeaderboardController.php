@@ -8,9 +8,7 @@ use Osoobe\Quiz\Services\Leaderboard;
 
 class LeaderboardController
 {
-    public function __construct(private Leaderboard $leaderboard)
-    {
-    }
+    public function __construct(private Leaderboard $leaderboard) {}
 
     public function show(Quiz $quiz)
     {

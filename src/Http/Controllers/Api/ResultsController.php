@@ -11,9 +11,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class ResultsController
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function index(Request $request, Quiz $quiz)
     {

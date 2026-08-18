@@ -17,9 +17,7 @@ use Osoobe\Quiz\Services\QuizAccess;
  */
 class QuizCrudController
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function index()
     {

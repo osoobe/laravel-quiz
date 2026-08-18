@@ -21,13 +21,13 @@ class SubmitAttempt
             $attempt->loadMissing('quiz');
 
             if ($attempt->status !== AttemptStatus::InProgress) {
-                throw new AttemptAlreadyCompletedException();
+                throw new AttemptAlreadyCompletedException;
             }
 
             $timeLimit = $attempt->quiz->time_limit_minutes;
 
             if ($timeLimit && now()->greaterThan($attempt->started_at->copy()->addMinutes($timeLimit))) {
-                throw new AttemptExpiredException();
+                throw new AttemptExpiredException;
             }
 
             $questionIds = collect($attempt->answers)->pluck('question_id');

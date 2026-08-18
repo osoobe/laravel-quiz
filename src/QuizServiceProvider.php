@@ -90,11 +90,11 @@ class QuizServiceProvider extends ServiceProvider
         $driver = config('quiz.auth_driver');
 
         return match (true) {
-            $driver === 'spatie' => new SpatieQuizAuthorizer(),
-            $driver === 'gate' => new GateQuizAuthorizer(),
+            $driver === 'spatie' => new SpatieQuizAuthorizer,
+            $driver === 'gate' => new GateQuizAuthorizer,
             $driver !== null => $this->app->make($driver),
-            class_exists(SpatieRole::class) => new SpatieQuizAuthorizer(),
-            default => new GateQuizAuthorizer(),
+            class_exists(SpatieRole::class) => new SpatieQuizAuthorizer,
+            default => new GateQuizAuthorizer,
         };
     }
 

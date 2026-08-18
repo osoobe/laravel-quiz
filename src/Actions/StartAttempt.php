@@ -19,8 +19,7 @@ class StartAttempt
         private QuizAccess $access,
         private AttemptLimiter $limiter,
         private BuildQuestionSet $buildQuestionSet,
-    ) {
-    }
+    ) {}
 
     public function execute(QuizUser $user, Quiz $quiz): QuizAttempt
     {
@@ -28,7 +27,7 @@ class StartAttempt
             // allows() already bypasses this for staff/the quiz creator (checked before
             // is_active — see QuizAccess::allows), so reaching here with an inactive quiz
             // means a regular user hit an inactive quiz, not a staff preview.
-            throw $quiz->is_active ? new QuizAccessDeniedException() : new QuizInactiveException();
+            throw $quiz->is_active ? new QuizAccessDeniedException : new QuizInactiveException;
         }
 
         return DB::transaction(function () use ($user, $quiz) {
@@ -49,7 +48,7 @@ class StartAttempt
             $questions = $this->buildQuestionSet->execute($quiz);
 
             if ($questions->isEmpty()) {
-                throw new NoQuestionsAvailableException();
+                throw new NoQuestionsAvailableException;
             }
 
             return QuizAttempt::create([

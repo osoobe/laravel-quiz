@@ -12,9 +12,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class TakerController
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     /**
      * Read-only pre-flight: quiz metadata + the caller's current/most recent attempt,
@@ -25,7 +23,7 @@ class TakerController
         $user = $request->user();
 
         if (! $this->access->allows($user, $quiz)) {
-            throw $quiz->is_active ? new QuizAccessDeniedException() : new QuizInactiveException();
+            throw $quiz->is_active ? new QuizAccessDeniedException : new QuizInactiveException;
         }
 
         $attempt = $user

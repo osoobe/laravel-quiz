@@ -9,9 +9,7 @@ use Osoobe\Quiz\Services\QuizAccess;
 
 class QuizInvitationPolicy
 {
-    public function __construct(private QuizAccess $access)
-    {
-    }
+    public function __construct(private QuizAccess $access) {}
 
     public function viewAny(QuizUser $user, Quiz $quiz): bool
     {

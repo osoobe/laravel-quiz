@@ -9,8 +9,7 @@ class ExportAllData
         private ExportCategories $categories,
         private ExportQuestions $questions,
         private ExportQuizzes $quizzes,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{topics: mixed, categories: mixed, questions: mixed, quizzes: mixed}
